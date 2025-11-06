@@ -1,0 +1,71 @@
+/* Google Login Button Styles */
+.google-login-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 24px;
+  background-color: #ffffff;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #3c4043;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Roboto', 'Arial', sans-serif;
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3);
+}
+
+.google-login-button:hover {
+  background-color: #f8f9fa;
+  border-color: #d2d3d4;
+  box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3);
+}
+
+.google-login-button:active {
+  background-color: #f1f3f4;
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3);
+}
+
+.google-login-button:disabled {
+  background-color: #f8f9fa;
+  border-color: #dadce0;
+  color: #80868b;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.google-login-button:disabled:hover {
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3);
+}
+
+.google-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+
+.google-button-text {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.25px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .google-login-button {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+  
+  .google-icon {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .google-button-text {
+    font-size: 13px;
+  }
+}
