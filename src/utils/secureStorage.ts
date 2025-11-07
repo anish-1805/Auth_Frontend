@@ -1,9 +1,9 @@
 /**
  * Secure LocalStorage Utility
- * 
+ *
  * Provides encrypted storage for sensitive data in localStorage.
  * Uses AES encryption with a device-specific key.
- * 
+ *
  * Security Features:
  * - AES-256-GCM encryption
  * - Device fingerprinting for key generation

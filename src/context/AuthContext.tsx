@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useReducer, useEffect, useCallback, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  useCallback,
+  ReactNode,
+} from 'react';
 import { User, LoginFormData, SignupRequestData } from '@/types/auth';
 import { AuthService } from '@/services/authService';
 
@@ -103,13 +110,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (isCheckingAuth) {
       return;
     }
-    
+
     setIsCheckingAuth(true);
     dispatch({ type: 'AUTH_START' });
-    
+
     try {
       const user = await AuthService.checkAuth();
-      
+
       if (user) {
         dispatch({ type: 'AUTH_SUCCESS', payload: user });
       } else {
@@ -132,17 +139,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Login function
   const login = async (data: LoginFormData): Promise<void> => {
     dispatch({ type: 'AUTH_START' });
-    
+
     try {
       const response = await AuthService.login(data);
-      
+
       if (response.success && response.user) {
         dispatch({ type: 'AUTH_SUCCESS', payload: response.user });
       } else {
         throw new Error(response.message || 'Login failed');
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Login failed';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Login failed';
       dispatch({ type: 'AUTH_FAILURE', payload: errorMessage });
       throw error; // Re-throw to handle in component
     }
@@ -151,10 +159,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Signup function
   const signup = async (data: SignupRequestData): Promise<void> => {
     dispatch({ type: 'AUTH_START' });
-    
+
     try {
       const response = await AuthService.signup(data);
-      
+
       if (response.success) {
         // For signup, we don't automatically log in the user
         // They need to login after successful signup
@@ -163,7 +171,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         throw new Error(response.message || 'Signup failed');
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Signup failed';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Signup failed';
       dispatch({ type: 'AUTH_FAILURE', payload: errorMessage });
       throw error; // Re-throw to handle in component
     }
@@ -172,14 +181,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Logout function
   const logout = async (): Promise<void> => {
     dispatch({ type: 'AUTH_START' });
-    
+
     try {
       await AuthService.logout();
       dispatch({ type: 'LOGOUT' });
     } catch (error) {
       // Even if logout fails on server, clear local state
       dispatch({ type: 'LOGOUT' });
-      console.error('Logout error:', error instanceof Error ? error.message : 'Unknown error');
+      console.error(
+        'Logout error:',
+        error instanceof Error ? error.message : 'Unknown error'
+      );
     }
   };
 
@@ -197,20 +209,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     clearError,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 // Custom hook to use auth context
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
-  
+
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
-  
+
   return context;
 };

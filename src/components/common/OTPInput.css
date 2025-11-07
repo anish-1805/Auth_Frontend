@@ -104,7 +104,7 @@
     height: 35px;
     font-size: 16px;
   }
-  
+
   .otp-input-group {
     gap: 6px;
     flex-wrap: nowrap;
@@ -117,7 +117,7 @@
     height: 30px;
     font-size: 14px;
   }
-  
+
   .otp-input-group {
     gap: 4px;
   }
@@ -131,9 +131,15 @@
 }
 
 @keyframes successPulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* Loading animation */
@@ -152,6 +158,10 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

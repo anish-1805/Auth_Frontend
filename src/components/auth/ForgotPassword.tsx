@@ -37,24 +37,27 @@ const ForgotPassword: React.FC = () => {
 
     try {
       await AuthService.forgotPassword(data);
-      
+
       toast.success('📧 Password reset code sent to your email!', {
-        position: "top-right",
+        position: 'top-right',
         autoClose: 4000,
       });
 
       // Navigate to password reset page
-      navigate('/reset-password', { 
-        state: { 
-          email: data.email
-        } 
+      navigate('/reset-password', {
+        state: {
+          email: data.email,
+        },
       });
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to send reset code. Please try again.';
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : 'Failed to send reset code. Please try again.';
       setServerError(errorMessage);
-      
+
       toast.error(`⚠️ ${errorMessage}`, {
-        position: "top-right",
+        position: 'top-right',
         autoClose: 5000,
       });
     } finally {
@@ -66,9 +69,7 @@ const ForgotPassword: React.FC = () => {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <div className="forgot-password-icon">
-            🔑
-          </div>
+          <div className="forgot-password-icon">🔑</div>
           <h1>Forgot Password?</h1>
           <p>No worries! Enter your email and we'll send you a reset code.</p>
         </div>

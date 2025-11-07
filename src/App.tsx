@@ -1,5 +1,11 @@
 import { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { Provider } from 'react-redux';
 import { store } from '@/store';
@@ -43,7 +49,9 @@ const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   // If authenticated, redirect to dashboard (or the page they came from)
   if (authState.isAuthenticated) {
-    const locationState = location.state as { from?: { pathname: string } } | null;
+    const locationState = location.state as {
+      from?: { pathname: string };
+    } | null;
     const from = locationState?.from?.pathname || '/dashboard';
     return <Navigate to={from} replace />;
   }
@@ -72,63 +80,63 @@ const AppRoutes: React.FC = () => {
     <Router>
       <Routes>
         {/* Public Routes */}
-        <Route 
-          path="/login" 
+        <Route
+          path="/login"
           element={
             <PublicRoute>
               <LoginForm />
             </PublicRoute>
-          } 
+          }
         />
-        <Route 
-          path="/signup" 
+        <Route
+          path="/signup"
           element={
             <PublicRoute>
               <SignupForm />
             </PublicRoute>
-          } 
+          }
         />
-        <Route 
-          path="/verify-email" 
+        <Route
+          path="/verify-email"
           element={
             <PublicRoute>
               <EmailVerification />
             </PublicRoute>
-          } 
+          }
         />
-        <Route 
-          path="/forgot-password" 
+        <Route
+          path="/forgot-password"
           element={
             <PublicRoute>
               <ForgotPassword />
             </PublicRoute>
-          } 
+          }
         />
-        <Route 
-          path="/reset-password" 
+        <Route
+          path="/reset-password"
           element={
             <PublicRoute>
               <PasswordReset />
             </PublicRoute>
-          } 
+          }
         />
-        <Route 
-          path="/auth/callback" 
+        <Route
+          path="/auth/callback"
           element={
             <PublicRoute>
               <OAuthCallback />
             </PublicRoute>
-          } 
+          }
         />
 
         {/* Protected Routes */}
-        <Route 
-          path="/dashboard" 
+        <Route
+          path="/dashboard"
           element={
             <ProtectedRoute>
               <Dashboard />
             </ProtectedRoute>
-          } 
+          }
         />
 
         {/* Default redirects */}

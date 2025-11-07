@@ -7,9 +7,9 @@ interface ProtectedRouteProps {
   fallback?: React.ReactNode;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
-  children, 
-  fallback 
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  fallback,
 }) => {
   const { state } = useAuth();
   const location = useLocation();
@@ -30,13 +30,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   // If not authenticated, redirect to login with the current location
   if (!state.isAuthenticated) {
-    return (
-      <Navigate 
-        to="/login" 
-        state={{ from: location }} 
-        replace 
-      />
-    );
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   // If authenticated, render the protected content

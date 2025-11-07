@@ -1,5 +1,10 @@
 import api from './api';
-import { LoginFormData, SignupRequestData, AuthResponse, User } from '@/types/auth';
+import {
+  LoginFormData,
+  SignupRequestData,
+  AuthResponse,
+  User,
+} from '@/types/auth';
 import { AxiosError } from 'axios';
 
 // Helper function to extract error message from Axios error
@@ -72,17 +77,20 @@ export class AuthService {
   }
 
   // Verify signup OTP
-  static async verifySignupOTP(data: { email: string; otp: string }): Promise<AuthResponse> {
+  static async verifySignupOTP(data: {
+    email: string;
+    otp: string;
+  }): Promise<AuthResponse> {
     try {
       const response = await api.post('/auth/verify-signup-otp', data);
-      
+
       // If auto-login was successful, update auth context
       if (response.data.user && response.data.data?.autoLogin) {
         // The JWT cookie is automatically set by the backend
         // Return the response with user data for context update
         return response.data;
       }
-      
+
       return response.data;
     } catch (error) {
       throw new Error(getErrorMessage(error, 'OTP verification failed'));
@@ -110,7 +118,10 @@ export class AuthService {
   }
 
   // Verify password reset OTP
-  static async verifyPasswordResetOTP(data: { email: string; otp: string }): Promise<AuthResponse> {
+  static async verifyPasswordResetOTP(data: {
+    email: string;
+    otp: string;
+  }): Promise<AuthResponse> {
     try {
       const response = await api.post('/auth/verify-password-reset-otp', data);
       return response.data;
@@ -120,7 +131,11 @@ export class AuthService {
   }
 
   // Reset password
-  static async resetPassword(data: { email: string; otp: string; newPassword: string }): Promise<AuthResponse> {
+  static async resetPassword(data: {
+    email: string;
+    otp: string;
+    newPassword: string;
+  }): Promise<AuthResponse> {
     try {
       const response = await api.post('/auth/reset-password', data);
       return response.data;

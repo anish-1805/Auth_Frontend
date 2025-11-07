@@ -1,9 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
+import Chatbot from './chat/Chatbot';
+import { requestSocketToken } from '@/utils/tokenHelper';
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {
   const { state, logout } = useAuth();
+  const [socketToken, setSocketToken] = useState<string | null>(null);
+
+  // Fetch socket token when component mounts
+  useEffect(() => {
+    const fetchSocketToken = async () => {
+      if (state.isAuthenticated) {
+        const token = await requestSocketToken();
+        setSocketToken(token);
+      }
+    };
+    fetchSocketToken();
+  }, [state.isAuthenticated]);
 
   const handleLogout = async () => {
     try {
@@ -19,13 +33,8 @@ const Dashboard: React.FC = () => {
         <div className="dashboard-nav">
           <h1>Dashboard</h1>
           <div className="user-menu">
-            <span className="user-greeting">
-              Welcome, {state.user?.name}!
-            </span>
-            <button 
-              onClick={handleLogout}
-              className="logout-button"
-            >
+            <span className="user-greeting">Welcome, {state.user?.name}!</span>
+            <button onClick={handleLogout} className="logout-button">
               Logout
             </button>
           </div>
@@ -51,7 +60,9 @@ const Dashboard: React.FC = () => {
             {state.user?.createdAt && (
               <div className="info-item">
                 <label>Member Since:</label>
-                <span>{new Date(state.user.createdAt).toLocaleDateString()}</span>
+                <span>
+                  {new Date(state.user.createdAt).toLocaleDateString()}
+                </span>
               </div>
             )}
           </div>
@@ -97,6 +108,9 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </main>
+
+      {/* Chatbot */}
+      {state.isAuthenticated && <Chatbot token={socketToken} />}
     </div>
   );
 };

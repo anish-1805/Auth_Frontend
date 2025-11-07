@@ -5,10 +5,7 @@ import { RootState } from '../index';
 const selectAuth = (state: RootState) => state.auth;
 
 // Memoized selectors
-export const selectUser = createSelector(
-  [selectAuth],
-  (auth) => auth.user
-);
+export const selectUser = createSelector([selectAuth], (auth) => auth.user);
 
 export const selectIsAuthenticated = createSelector(
   [selectAuth],
@@ -30,10 +27,7 @@ export const selectIsInitialized = createSelector(
   (auth) => auth.isInitialized
 );
 
-export const selectAuthState = createSelector(
-  [selectAuth],
-  (auth) => auth
-);
+export const selectAuthState = createSelector([selectAuth], (auth) => auth);
 
 // Computed selectors
 export const selectUserName = createSelector(

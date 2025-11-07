@@ -20,7 +20,7 @@ import { LoginFormData, SignupRequestData } from '@/types/auth';
 
 export const useAuthRedux = () => {
   const dispatch = useAppDispatch();
-  
+
   // Selectors
   const authState = useAppSelector(selectAuthState);
   const user = useAppSelector(selectUser);

@@ -14,7 +14,7 @@ const OTPInput: React.FC<OTPInputProps> = ({
   onComplete,
   loading = false,
   error = '',
-  autoFocus = true
+  autoFocus = true,
 }) => {
   const [otp, setOtp] = useState<string[]>(new Array(length).fill(''));
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -38,15 +38,18 @@ const OTPInput: React.FC<OTPInputProps> = ({
     }
 
     // Call onComplete when all fields are filled
-    if (newOtp.every(digit => digit !== '')) {
+    if (newOtp.every((digit) => digit !== '')) {
       onComplete(newOtp.join(''));
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    index: number
+  ) => {
     if (e.key === 'Backspace') {
       const newOtp = [...otp];
-      
+
       if (otp[index]) {
         // Clear current field
         newOtp[index] = '';
@@ -67,7 +70,7 @@ const OTPInput: React.FC<OTPInputProps> = ({
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
     const pastedData = e.clipboardData.getData('text/plain').slice(0, length);
-    
+
     if (!/^\d+$/.test(pastedData)) return;
 
     const newOtp = [...otp];
@@ -77,12 +80,12 @@ const OTPInput: React.FC<OTPInputProps> = ({
     setOtp(newOtp);
 
     // Focus the next empty field or the last field
-    const nextEmptyIndex = newOtp.findIndex(digit => digit === '');
+    const nextEmptyIndex = newOtp.findIndex((digit) => digit === '');
     const focusIndex = nextEmptyIndex !== -1 ? nextEmptyIndex : length - 1;
     inputRefs.current[focusIndex]?.focus();
 
     // Call onComplete if all fields are filled
-    if (newOtp.every(digit => digit !== '')) {
+    if (newOtp.every((digit) => digit !== '')) {
       onComplete(newOtp.join(''));
     }
   };
@@ -98,13 +101,13 @@ const OTPInput: React.FC<OTPInputProps> = ({
         {otp.map((digit, index) => (
           <input
             key={index}
-            ref={el => inputRefs.current[index] = el}
+            ref={(el) => (inputRefs.current[index] = el)}
             type="text"
             inputMode="numeric"
             maxLength={1}
             value={digit}
-            onChange={e => handleChange(e.target, index)}
-            onKeyDown={e => handleKeyDown(e, index)}
+            onChange={(e) => handleChange(e.target, index)}
+            onKeyDown={(e) => handleKeyDown(e, index)}
             onPaste={handlePaste}
             className={`otp-input ${error ? 'error' : ''} ${loading ? 'loading' : ''}`}
             disabled={loading}
@@ -112,19 +115,19 @@ const OTPInput: React.FC<OTPInputProps> = ({
           />
         ))}
       </div>
-      
+
       {error && (
         <div className="otp-error">
           <span className="error-icon">⚠️</span>
           {error}
         </div>
       )}
-      
+
       <button
         type="button"
         onClick={clearOtp}
         className="otp-clear-button"
-        disabled={loading || otp.every(digit => digit === '')}
+        disabled={loading || otp.every((digit) => digit === '')}
       >
         Clear
       </button>

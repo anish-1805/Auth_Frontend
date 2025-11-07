@@ -8,7 +8,7 @@ export const useAuth = useAuthRedux;
 // Hook to check if user has specific permissions (example)
 export const usePermissions = () => {
   const { state } = useAuth();
-  
+
   const hasPermission = (_permission: string): boolean => {
     // Implement your permission logic here
     // This is just an example - using underscore prefix to indicate unused parameter
@@ -30,7 +30,7 @@ export const usePermissions = () => {
 // Hook for auth loading states
 export const useAuthLoading = () => {
   const { state } = useAuth();
-  
+
   return {
     isLoading: state.isLoading,
     isAuthenticated: state.isAuthenticated,

@@ -1,9 +1,9 @@
 /**
  * Storage Service
- * 
+ *
  * Manages application storage with secure localStorage for sensitive data
  * and regular localStorage for non-sensitive data.
- * 
+ *
  * Features:
  * - Secure encrypted storage for auth tokens and sensitive data
  * - Regular storage for user preferences
@@ -20,7 +20,7 @@ export const STORAGE_KEYS = {
   USER_DATA: 'user_data',
   AUTH_STATE: 'auth_state',
   REMEMBER_ME: 'remember_me',
-  
+
   // Regular storage keys (not encrypted - for non-sensitive data)
   THEME: 'theme',
   LANGUAGE: 'language',
@@ -64,13 +64,13 @@ export class StorageService {
    */
   static saveUser(user: User, rememberMe: boolean = false): void {
     try {
-      const expiration = rememberMe 
-        ? STORAGE_EXPIRATION.REMEMBER_ME 
+      const expiration = rememberMe
+        ? STORAGE_EXPIRATION.REMEMBER_ME
         : STORAGE_EXPIRATION.USER_DATA;
-      
+
       SecureStorage.setItem(STORAGE_KEYS.USER_DATA, user, expiration);
       SecureStorage.setItem(STORAGE_KEYS.REMEMBER_ME, rememberMe, expiration);
-      
+
       console.log('✅ StorageService: User data saved securely');
     } catch (error) {
       console.error('❌ StorageService: Failed to save user data', error);
@@ -84,7 +84,9 @@ export class StorageService {
     try {
       const user = SecureStorage.getItem<User>(STORAGE_KEYS.USER_DATA);
       if (user) {
-        console.log('✅ StorageService: User data retrieved from secure storage');
+        console.log(
+          '✅ StorageService: User data retrieved from secure storage'
+        );
       }
       return user;
     } catch (error) {
@@ -115,13 +117,13 @@ export class StorageService {
         isAuthenticated,
         lastChecked: Date.now(),
       };
-      
+
       SecureStorage.setItem(
         STORAGE_KEYS.AUTH_STATE,
         authState,
         STORAGE_EXPIRATION.AUTH_STATE
       );
-      
+
       console.log('✅ StorageService: Auth state saved securely');
     } catch (error) {
       console.error('❌ StorageService: Failed to save auth state', error);
@@ -210,7 +212,11 @@ export class StorageService {
    */
   static getTheme(): 'light' | 'dark' | 'system' | null {
     try {
-      return localStorage.getItem(STORAGE_KEYS.THEME) as 'light' | 'dark' | 'system' | null;
+      return localStorage.getItem(STORAGE_KEYS.THEME) as
+        | 'light'
+        | 'dark'
+        | 'system'
+        | null;
     } catch (error) {
       console.error('❌ StorageService: Failed to get theme', error);
       return null;
@@ -224,7 +230,10 @@ export class StorageService {
     try {
       localStorage.setItem(STORAGE_KEYS.LAST_LOGIN_EMAIL, email);
     } catch (error) {
-      console.error('❌ StorageService: Failed to save last login email', error);
+      console.error(
+        '❌ StorageService: Failed to save last login email',
+        error
+      );
     }
   }
 

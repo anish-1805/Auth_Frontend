@@ -8,7 +8,7 @@ const loadInitialState = () => {
   try {
     const user = StorageService.getUser();
     const authState = StorageService.getAuthState();
-    
+
     return {
       auth: {
         user: user,

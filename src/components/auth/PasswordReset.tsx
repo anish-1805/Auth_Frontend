@@ -39,13 +39,13 @@ const PasswordReset: React.FC = () => {
   const [verifiedOTP, setVerifiedOTP] = useState('');
   const [countdown, setCountdown] = useState(0); // Countdown in seconds
   const [canResend, setCanResend] = useState(true);
-  
+
   const navigate = useNavigate();
   const location = useLocation();
 
   // Get email from location state
   const email = location.state?.email || '';
-  
+
   // OTP expiry time in seconds (5 minutes)
   const OTP_EXPIRY_TIME = 300;
 
@@ -87,21 +87,36 @@ const PasswordReset: React.FC = () => {
 
   // Watch form values for clearing errors
   const watchedValues = watch();
-  
+
   useEffect(() => {
     if (currentStep === 'password') {
-      if (!watchedValues.newPassword || watchedValues.newPassword.trim() === '') {
+      if (
+        !watchedValues.newPassword ||
+        watchedValues.newPassword.trim() === ''
+      ) {
         clearErrors('newPassword');
       }
-      if (!watchedValues.confirmPassword || watchedValues.confirmPassword.trim() === '') {
+      if (
+        !watchedValues.confirmPassword ||
+        watchedValues.confirmPassword.trim() === ''
+      ) {
         clearErrors('confirmPassword');
       }
-      
-      if (serverError && (watchedValues.newPassword || watchedValues.confirmPassword)) {
+
+      if (
+        serverError &&
+        (watchedValues.newPassword || watchedValues.confirmPassword)
+      ) {
         setServerError('');
       }
     }
-  }, [watchedValues.newPassword, watchedValues.confirmPassword, clearErrors, serverError, currentStep]);
+  }, [
+    watchedValues.newPassword,
+    watchedValues.confirmPassword,
+    clearErrors,
+    serverError,
+    currentStep,
+  ]);
 
   // Handle OTP verification
   const handleOTPComplete = async (otp: string) => {
@@ -110,21 +125,23 @@ const PasswordReset: React.FC = () => {
 
     try {
       await AuthService.verifyPasswordResetOTP({ email, otp });
-      
+
       setVerifiedOTP(otp);
       setCurrentStep('password');
-      
+
       toast.success('✅ Code verified! Now create your new password.', {
-        position: "top-right",
+        position: 'top-right',
         autoClose: 3000,
       });
-
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Invalid or expired code. Please try again.';
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : 'Invalid or expired code. Please try again.';
       setError(errorMessage);
-      
+
       toast.error(`❌ ${errorMessage}`, {
-        position: "top-right",
+        position: 'top-right',
         autoClose: 5000,
       });
     } finally {
@@ -142,24 +159,24 @@ const PasswordReset: React.FC = () => {
 
     try {
       await AuthService.forgotPassword({ email });
-      
+
       // Start countdown timer
       setCountdown(OTP_EXPIRY_TIME);
-      
+
       toast.success('📧 New reset code sent to your email!', {
-        position: "top-right",
+        position: 'top-right',
         autoClose: 4000,
       });
-
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to resend reset code.';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to resend reset code.';
       setError(errorMessage);
-      
+
       // Re-enable resend button on error
       setCanResend(true);
-      
+
       toast.error(`⚠️ ${errorMessage}`, {
-        position: "top-right",
+        position: 'top-right',
         autoClose: 5000,
       });
     } finally {
@@ -176,37 +193,47 @@ const PasswordReset: React.FC = () => {
       await AuthService.resetPassword({
         email,
         otp: verifiedOTP,
-        newPassword: data.newPassword
-      });
-      
-      toast.success('🎉 Password reset successfully! You can now log in with your new password.', {
-        position: "top-right",
-        autoClose: 5000,
+        newPassword: data.newPassword,
       });
 
+      toast.success(
+        '🎉 Password reset successfully! You can now log in with your new password.',
+        {
+          position: 'top-right',
+          autoClose: 5000,
+        }
+      );
+
       // Navigate to login page
-      navigate('/login', { 
-        state: { 
-          message: 'Password reset successfully! Please log in with your new password.',
-          email: email 
-        } 
+      navigate('/login', {
+        state: {
+          message:
+            'Password reset successfully! Please log in with your new password.',
+          email: email,
+        },
       });
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to reset password. Please try again.';
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : 'Failed to reset password. Please try again.';
       setServerError(errorMessage);
-      
-      if (errorMessage.toLowerCase().includes('expired') || errorMessage.toLowerCase().includes('invalid')) {
+
+      if (
+        errorMessage.toLowerCase().includes('expired') ||
+        errorMessage.toLowerCase().includes('invalid')
+      ) {
         toast.error('🔄 Reset code expired. Please request a new one.', {
-          position: "top-right",
+          position: 'top-right',
           autoClose: 5000,
         });
-        
+
         // Go back to OTP step
         setCurrentStep('otp');
         setVerifiedOTP('');
       } else {
         toast.error(`⚠️ ${errorMessage}`, {
-          position: "top-right",
+          position: 'top-right',
           autoClose: 5000,
         });
       }
@@ -228,12 +255,16 @@ const PasswordReset: React.FC = () => {
       <div className="auth-card">
         {/* Progress indicator */}
         <div className="progress-indicator">
-          <div className={`progress-step ${currentStep === 'otp' ? 'active' : 'completed'}`}>
+          <div
+            className={`progress-step ${currentStep === 'otp' ? 'active' : 'completed'}`}
+          >
             <span className="step-number">1</span>
             <span className="step-label">Verify Code</span>
           </div>
           <div className="progress-line"></div>
-          <div className={`progress-step ${currentStep === 'password' ? 'active' : ''}`}>
+          <div
+            className={`progress-step ${currentStep === 'password' ? 'active' : ''}`}
+          >
             <span className="step-number">2</span>
             <span className="step-label">New Password</span>
           </div>
@@ -279,7 +310,8 @@ const PasswordReset: React.FC = () => {
                   ) : !canResend && countdown > 0 ? (
                     <>
                       <span className="resend-icon">⏱️</span>
-                      Resend in {Math.floor(countdown / 60)}:{String(countdown % 60).padStart(2, '0')}
+                      Resend in {Math.floor(countdown / 60)}:
+                      {String(countdown % 60).padStart(2, '0')}
                     </>
                   ) : (
                     <>
@@ -315,7 +347,10 @@ const PasswordReset: React.FC = () => {
               </div>
             </div>
 
-            <form onSubmit={handleSubmit(onPasswordSubmit)} className="auth-form">
+            <form
+              onSubmit={handleSubmit(onPasswordSubmit)}
+              className="auth-form"
+            >
               {serverError && (
                 <div className="error-message server-error">
                   <span className="error-icon">⚠️</span>
@@ -345,11 +380,14 @@ const PasswordReset: React.FC = () => {
                   </button>
                 </div>
                 {errors.newPassword && (
-                  <span className="error-message">{errors.newPassword.message}</span>
+                  <span className="error-message">
+                    {errors.newPassword.message}
+                  </span>
                 )}
                 <div className="password-requirements">
                   <small>
-                    Password must contain at least 8 characters with uppercase, lowercase, number, and special character.
+                    Password must contain at least 8 characters with uppercase,
+                    lowercase, number, and special character.
                   </small>
                 </div>
               </div>
@@ -376,7 +414,9 @@ const PasswordReset: React.FC = () => {
                   </button>
                 </div>
                 {errors.confirmPassword && (
-                  <span className="error-message">{errors.confirmPassword.message}</span>
+                  <span className="error-message">
+                    {errors.confirmPassword.message}
+                  </span>
                 )}
               </div>
 
@@ -388,7 +428,7 @@ const PasswordReset: React.FC = () => {
                 >
                   ← Back to Code
                 </button>
-                
+
                 <button
                   type="submit"
                   className={`auth-button ${isLoading ? 'loading' : ''}`}
@@ -426,7 +466,7 @@ const PasswordReset: React.FC = () => {
         <div className="auth-footer">
           <p>
             Wrong email?{' '}
-            <button 
+            <button
               type="button"
               onClick={() => navigate('/forgot-password')}
               className="link-button"
@@ -436,7 +476,7 @@ const PasswordReset: React.FC = () => {
           </p>
           <p>
             Remember your password?{' '}
-            <button 
+            <button
               type="button"
               onClick={() => navigate('/login')}
               className="link-button"

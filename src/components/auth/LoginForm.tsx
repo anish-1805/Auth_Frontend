@@ -33,19 +33,19 @@ const LoginForm: React.FC = () => {
 
   // Watch form values to clear errors when fields are emptied
   const watchedValues = watch();
-  
+
   useEffect(() => {
     // Clear errors immediately when field becomes empty
     const emailValue = watchedValues.email || '';
     const passwordValue = watchedValues.password || '';
-    
+
     if (emailValue.trim() === '') {
       clearErrors('email');
     }
     if (passwordValue.trim() === '') {
       clearErrors('password');
     }
-    
+
     // Clear server error when user starts typing
     if (serverError && (emailValue || passwordValue)) {
       setServerError('');
@@ -58,37 +58,45 @@ const LoginForm: React.FC = () => {
 
     try {
       await login(data);
-      
+
       // Show success toast
       toast.success('Login successful! Welcome back!', {
-        position: "top-right",
+        position: 'top-right',
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
       });
-      
+
       // Redirect to the intended page or dashboard
       navigate(from, { replace: true });
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Login failed. Please check your credentials.';
-      
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : 'Login failed. Please check your credentials.';
+
       // Show different toast messages based on error type
-      if (errorMessage.toLowerCase().includes('password') || 
-          errorMessage.toLowerCase().includes('invalid email or password') ||
-          errorMessage.toLowerCase().includes('credentials')) {
-        toast.error('❌ Wrong password! Please check your credentials and try again.', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
+      if (
+        errorMessage.toLowerCase().includes('password') ||
+        errorMessage.toLowerCase().includes('invalid email or password') ||
+        errorMessage.toLowerCase().includes('credentials')
+      ) {
+        toast.error(
+          '❌ Wrong password! Please check your credentials and try again.',
+          {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          }
+        );
       } else if (errorMessage.toLowerCase().includes('email')) {
         toast.error('📧 Email not found! Please check your email address.', {
-          position: "top-right",
+          position: 'top-right',
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -97,7 +105,7 @@ const LoginForm: React.FC = () => {
         });
       } else {
         toast.error(`⚠️ ${errorMessage}`, {
-          position: "top-right",
+          position: 'top-right',
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -105,7 +113,7 @@ const LoginForm: React.FC = () => {
           draggable: true,
         });
       }
-      
+
       setServerError(errorMessage);
     } finally {
       setIsLoading(false);
@@ -114,7 +122,7 @@ const LoginForm: React.FC = () => {
 
   const handleGoogleError = (error: string) => {
     toast.error(`Google login failed: ${error}`, {
-      position: "top-right",
+      position: 'top-right',
       autoClose: 5000,
     });
   };
@@ -129,9 +137,7 @@ const LoginForm: React.FC = () => {
 
         <form onSubmit={handleSubmit(onSubmit)} className="auth-form">
           {serverError && (
-            <div className="error-message server-error">
-              {serverError}
-            </div>
+            <div className="error-message server-error">{serverError}</div>
           )}
 
           <div className="form-group">

@@ -7,26 +7,30 @@ interface GoogleLoginButtonProps {
   mode?: 'login' | 'signup';
 }
 
-const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({ 
-  onError, 
+const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
+  onError,
   isLoading = false,
-  mode = 'login'
+  mode = 'login',
 }) => {
   const handleGoogleLogin = () => {
     try {
       // Get the backend URL from environment or use default
-      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-      
+      const backendUrl =
+        import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
       // Redirect to backend Google OAuth endpoint
       window.location.href = `${backendUrl}/api/auth/google`;
     } catch (error) {
-      onError(error instanceof Error ? error.message : 'Failed to initiate Google login');
+      onError(
+        error instanceof Error
+          ? error.message
+          : 'Failed to initiate Google login'
+      );
     }
   };
 
-  const buttonText = mode === 'login' 
-    ? 'Continue with Google' 
-    : 'Sign up with Google';
+  const buttonText =
+    mode === 'login' ? 'Continue with Google' : 'Sign up with Google';
 
   return (
     <button

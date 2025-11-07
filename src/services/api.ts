@@ -38,7 +38,7 @@ api.interceptors.response.use(
       // Server error
       console.error('Server error:', error.response.data);
     }
-    
+
     return Promise.reject(error);
   }
 );

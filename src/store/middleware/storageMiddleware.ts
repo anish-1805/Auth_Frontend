@@ -1,9 +1,9 @@
 /**
  * Storage Persistence Middleware
- * 
+ *
  * Redux middleware that automatically persists auth state to secure storage
  * when certain actions are dispatched.
- * 
+ *
  * Features:
  * - Automatic persistence on auth state changes
  * - Secure encrypted storage
@@ -62,14 +62,21 @@ export const storageMiddleware: Middleware = (store) => (next) => (action) => {
         if (isAuthenticated && user) {
           const rememberMe = StorageService.isRememberMeEnabled();
           StorageService.saveUser(user, rememberMe);
-          console.log('💾 StorageMiddleware: Auth state persisted to secure storage');
+          console.log(
+            '💾 StorageMiddleware: Auth state persisted to secure storage'
+          );
         } else {
           // Clear user data if not authenticated
           StorageService.removeUser();
-          console.log('🗑️ StorageMiddleware: User data removed from secure storage');
+          console.log(
+            '🗑️ StorageMiddleware: User data removed from secure storage'
+          );
         }
       } catch (error) {
-        console.error('❌ StorageMiddleware: Failed to persist auth state', error);
+        console.error(
+          '❌ StorageMiddleware: Failed to persist auth state',
+          error
+        );
       }
     }, DEBOUNCE_DELAY);
   }

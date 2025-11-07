@@ -1,9 +1,9 @@
 /**
  * useSecureStorage Hook
- * 
+ *
  * React hook for using secure localStorage with encryption.
  * Provides a simple API similar to useState but with persistence.
- * 
+ *
  * @example
  * const [value, setValue, removeValue] = useSecureStorage('myKey', 'defaultValue');
  */

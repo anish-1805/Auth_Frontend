@@ -16,15 +16,16 @@ const OAuthCallback: React.FC = () => {
 
       if (error) {
         // Handle OAuth error
-        const errorMessage = error === 'oauth_failed' 
-          ? 'Google authentication failed. Please try again.' 
-          : decodeURIComponent(error);
-        
+        const errorMessage =
+          error === 'oauth_failed'
+            ? 'Google authentication failed. Please try again.'
+            : decodeURIComponent(error);
+
         toast.error(`❌ ${errorMessage}`, {
-          position: "top-right",
+          position: 'top-right',
           autoClose: 5000,
         });
-        
+
         navigate('/login', { replace: true });
         return;
       }
@@ -33,19 +34,19 @@ const OAuthCallback: React.FC = () => {
         // OAuth successful, check auth to get user data
         try {
           await dispatch(checkAuth()).unwrap();
-          
+
           toast.success('🎉 Successfully logged in with Google!', {
-            position: "top-right",
+            position: 'top-right',
             autoClose: 3000,
           });
-          
+
           navigate('/dashboard', { replace: true });
         } catch (error) {
           toast.error('Failed to authenticate. Please try again.', {
-            position: "top-right",
+            position: 'top-right',
             autoClose: 5000,
           });
-          
+
           navigate('/login', { replace: true });
         }
       } else {

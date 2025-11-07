@@ -34,7 +34,7 @@ export const loginUser = createAsyncThunk(
   async (data: LoginFormData, { rejectWithValue }) => {
     try {
       const response = await AuthService.login(data);
-      
+
       if (response.success && response.user) {
         return response.user;
       } else {
@@ -51,7 +51,7 @@ export const signupUser = createAsyncThunk(
   async (data: SignupRequestData, { rejectWithValue }) => {
     try {
       const response = await AuthService.signup(data);
-      
+
       if (response.success) {
         return response.message || 'Signup successful';
       } else {
@@ -63,39 +63,33 @@ export const signupUser = createAsyncThunk(
   }
 );
 
-export const logoutUser = createAsyncThunk(
-  'auth/logout',
-  async () => {
-    try {
-      await AuthService.logout();
-      return true;
-    } catch (error) {
-      // Even if logout fails on server, we should clear local state
-      console.error('Logout error:', getErrorMessage(error));
-      return true;
-    }
+export const logoutUser = createAsyncThunk('auth/logout', async () => {
+  try {
+    await AuthService.logout();
+    return true;
+  } catch (error) {
+    // Even if logout fails on server, we should clear local state
+    console.error('Logout error:', getErrorMessage(error));
+    return true;
   }
-);
+});
 
-export const checkAuth = createAsyncThunk(
-  'auth/checkAuth',
-  async () => {
-    try {
-      const user = await AuthService.checkAuth();
-      return user;
-    } catch (error) {
-      // Return null for failed auth check instead of rejecting
-      return null;
-    }
+export const checkAuth = createAsyncThunk('auth/checkAuth', async () => {
+  try {
+    const user = await AuthService.checkAuth();
+    return user;
+  } catch (error) {
+    // Return null for failed auth check instead of rejecting
+    return null;
   }
-);
+});
 
 export const refreshToken = createAsyncThunk(
   'auth/refreshToken',
   async (_, { rejectWithValue }) => {
     try {
       const response = await AuthService.refreshToken();
-      
+
       if (response.success && response.user) {
         return response.user;
       } else {
@@ -140,7 +134,10 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        console.log('✅ Redux: Login successful - storing user data:', action.payload);
+        console.log(
+          '✅ Redux: Login successful - storing user data:',
+          action.payload
+        );
         state.isLoading = false;
         state.isAuthenticated = true;
         state.user = action.payload;
@@ -148,7 +145,10 @@ const authSlice = createSlice({
         state.isInitialized = true;
       })
       .addCase(loginUser.rejected, (state, action) => {
-        console.log('❌ Redux: Login failed - clearing user data, error:', action.payload);
+        console.log(
+          '❌ Redux: Login failed - clearing user data, error:',
+          action.payload
+        );
         state.isLoading = false;
         state.isAuthenticated = false;
         state.user = null;
@@ -164,7 +164,9 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(signupUser.fulfilled, (state) => {
-        console.log('✅ Redux: Signup successful - user created (no auto-login)');
+        console.log(
+          '✅ Redux: Signup successful - user created (no auto-login)'
+        );
         state.isLoading = false;
         state.error = null;
         // Don't auto-login after signup
@@ -194,7 +196,9 @@ const authSlice = createSlice({
         state.isInitialized = true;
       })
       .addCase(logoutUser.rejected, (state) => {
-        console.log('🚪 Redux: Logout completed (even with error) - clearing all user data');
+        console.log(
+          '🚪 Redux: Logout completed (even with error) - clearing all user data'
+        );
         state.isLoading = false;
         state.isAuthenticated = false;
         state.user = null;
@@ -212,11 +216,16 @@ const authSlice = createSlice({
       .addCase(checkAuth.fulfilled, (state, action) => {
         state.isLoading = false;
         if (action.payload) {
-          console.log('✅ Redux: Auth check successful - user is authenticated:', action.payload);
+          console.log(
+            '✅ Redux: Auth check successful - user is authenticated:',
+            action.payload
+          );
           state.isAuthenticated = true;
           state.user = action.payload;
         } else {
-          console.log('❌ Redux: Auth check failed - no valid session, clearing user data');
+          console.log(
+            '❌ Redux: Auth check failed - no valid session, clearing user data'
+          );
           state.isAuthenticated = false;
           state.user = null;
         }
@@ -232,7 +241,10 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(refreshToken.fulfilled, (state, action) => {
-        console.log('🔄 Redux: Token refresh successful - updating user data:', action.payload);
+        console.log(
+          '🔄 Redux: Token refresh successful - updating user data:',
+          action.payload
+        );
         state.isLoading = false;
         state.isAuthenticated = true;
         state.user = action.payload;
@@ -240,7 +252,10 @@ const authSlice = createSlice({
         state.isInitialized = true;
       })
       .addCase(refreshToken.rejected, (state, action) => {
-        console.log('❌ Redux: Token refresh failed - clearing user data, error:', action.payload);
+        console.log(
+          '❌ Redux: Token refresh failed - clearing user data, error:',
+          action.payload
+        );
         state.isLoading = false;
         state.isAuthenticated = false;
         state.user = null;
